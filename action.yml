@@ -32,6 +32,7 @@ runs:
   using: "composite"
   steps:        
       - name: Check runner type
+        shell: bash
         run: |
           if [[ "${{ runner.labels }}" == *"self-hosted"* ]]; then
             echo "Running on self-hosted runner"
