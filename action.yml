@@ -1,0 +1,61 @@
+name: 'Install and Deploy terraform to aws cloud'
+description: 'Prepare for app deployment'
+inputs:
+  iscleanup:
+    description: 'Boolean value to indicate if need to create credentials or if this is a cleanup operation.'
+    required: true
+  awsaccesskeyid:
+    description: 'The aws access key Id.'
+    required: true
+  awsaccesssecret:
+    description: 'The aws access secret.'
+    required: true      
+  environmentName:
+    description: 'The name of the current environmnet'
+    required: true
+  backendBucket:
+    description: 'The s3 bucket name used by the backend to save terraform state.'
+    required: true
+  regionName:
+    description: 'The aws region name.'
+    required: true        
+  profileName:
+    description: 'The aws profile name used to login.'
+    required: true   
+  backendDynamoDB:
+    description: 'The dynamodb table name used by terraform for locking.'
+    required: true   
+  scriptPath:
+    description: 'The folder path where all the terraform scripts exist.'
+    required: true  
+  terraformversion:
+    description: 'The version of terraform to be used'
+    required: true             
+runs:
+  using: "composite"
+  steps:        
+      - name: Install Terraform
+        uses: autero1/action-terraform@v3
+        with:
+          terraform-version: ${{ inputs.terraformversion }}
+      - name: Setup Aws credentials
+        uses: placemyorder/awscredentialsetup@v1.0.0
+        with:
+          iscleanup: false
+          awsaccesskeyid: ${{ inputs.awsaccesskeyid }}
+          awsaccesssecret: ${{ inputs.awsaccesssecret }}
+      - name: Execute Terraform Scripts
+        uses: placemyorder/awsterraformdeploy@v1.0.0
+        with:
+          backendBucket: ${{ inputs.backendBucket }}
+          backendDynamoDB: ${{ inputs.backendDynamoDB }}
+          environmentName: ${{ inputs.environmentName }}
+          profileName: ${{ inputs.profileName }}
+          regionName: ${{ inputs.regionName }}
+          scriptPath: ${{ inputs.scriptPath }}
+      - name: CleanUp Credentials
+        uses: placemyorder/awscredentialsetup@v1.0.0
+        with:
+          iscleanup: true
+          awsaccesskeyid: ${{ inputs.awsaccesskeyid }}
+          awsaccesssecret: ${{ inputs.awsaccesssecret }}            
