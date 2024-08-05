@@ -1,9 +1,6 @@
 name: 'Install and Deploy terraform to aws cloud'
 description: 'Prepare for app deployment'
 inputs:
-  iscleanup:
-    description: 'Boolean value to indicate if need to create credentials or if this is a cleanup operation.'
-    required: true
   awsaccesskeyid:
     description: 'The aws access key Id.'
     required: true
