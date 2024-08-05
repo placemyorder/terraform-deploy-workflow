@@ -27,28 +27,32 @@ inputs:
     required: true  
   terraformversion:
     description: 'The version of terraform to be used'
-    required: true             
+    required: true   
+  isrunningonselfhosted:
+    description: 'Is the action running on a self hosted runner'
+    default: 'false'                 
 runs:
   using: "composite"
   steps:        
-      - name: Check runner type
-        shell: bash
-        run: |
-          if [[ "${{ runner.labels }}" == *"self-hosted"* ]]; then
-            echo "Running on self-hosted runner"
-          else
-            echo "Running on GitHub-hosted runner"
-          fi
       - name: Install Terraform
         uses: autero1/action-terraform@v3
         with:
           terraform-version: ${{ inputs.terraformversion }}
-      - name: Setup Aws credentials
+      - name: Setup Aws credentials Self-Hosted
+        if: ${{ inputs.isrunningonselfhosted == 'true' }}
         uses: placemyorder/awscredentialsetup@v1.0.0
         with:
           iscleanup: false
           awsaccesskeyid: ${{ inputs.awsaccesskeyid }}
           awsaccesssecret: ${{ inputs.awsaccesssecret }}
+      - name: Setup Aws credentials
+        if: ${{ inputs.isrunningonselfhosted == 'false' }}
+        uses: Fooji/create-aws-profile-action@v1
+        with:
+          profile: ${{ inputs.profileName }}
+          region: ${{ inputs.regionName }}
+          key: ${{ inputs.awsaccesskeyid }}
+          secret: ${{ inputs.awsaccesssecret }}   
       - name: Execute Terraform Scripts
         uses: placemyorder/awsterraformdeploy@v1.0.0
         with:
@@ -59,6 +63,7 @@ runs:
           regionName: ${{ inputs.regionName }}
           scriptPath: ${{ inputs.scriptPath }}
       - name: CleanUp Credentials
+        if: ${{ inputs.isrunningonselfhosted == 'true' }}
         uses: placemyorder/awscredentialsetup@v1.0.0
         with:
           iscleanup: true
