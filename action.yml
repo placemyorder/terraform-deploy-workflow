@@ -35,9 +35,9 @@ runs:
   using: "composite"
   steps:        
       - name: Install Terraform
-        uses: autero1/action-terraform@v3
+        uses: hashicorp/setup-terraform@v3.1.1    
         with:
-          terraform-version: ${{ inputs.terraformversion }}
+          terraform_version: ${{ inputs.terraformversion }}
       - name: Setup Aws credentials Self-Hosted
         if: ${{ inputs.isrunningonselfhosted == 'true' }}
         uses: placemyorder/awscredentialsetup@v1.0.0
