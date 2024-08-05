@@ -31,6 +31,13 @@ inputs:
 runs:
   using: "composite"
   steps:        
+      - name: Check runner type
+        run: |
+          if [[ "${{ runner.labels }}" == *"self-hosted"* ]]; then
+            echo "Running on self-hosted runner"
+          else
+            echo "Running on GitHub-hosted runner"
+          fi
       - name: Install Terraform
         uses: autero1/action-terraform@v3
         with:
