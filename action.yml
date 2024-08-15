@@ -45,7 +45,13 @@ inputs:
     default: ''        
   ecsRepoUrl:
     description: 'The AWS ECS Repo url'
-    default: ''                              
+    default: ''  
+  rununittests:
+    description: 'Flag to check if unit tests need to run'
+    default: 'false'    
+  dockerfilename:
+    description: 'The docker file name'
+    default: ''                               
 runs:
   using: "composite"
   steps:        
@@ -76,6 +82,8 @@ runs:
           buildNumber: ${{ inputs.buildNumber }}
           ecsRepoUrl: ${{ inputs.ecsRepoUrl }}
           unittestpath: ${{ inputs.unittestpath }}
+          rununittests: ${{ inputs.rununittests }}
+          dockerfilename: : ${{ inputs.dockerfilename }}          
       - name: Execute Terraform Scripts
         uses: placemyorder/awsterraformdeploy@v1.0.0
         with:
