@@ -83,7 +83,7 @@ runs:
           ecsRepoUrl: ${{ inputs.ecsRepoUrl }}
           unittestpath: ${{ inputs.unittestpath }}
           rununittests: ${{ inputs.rununittests }}
-          dockerfilename: : ${{ inputs.dockerfilename }}          
+          dockerfilename: ${{ inputs.dockerfilename }}          
       - name: Execute Terraform Scripts
         uses: placemyorder/awsterraformdeploy@v1.0.0
         with:
