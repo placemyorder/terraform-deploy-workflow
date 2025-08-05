@@ -88,7 +88,7 @@ runs:
           rununittests: ${{ inputs.rununittests }}
           dockerfilename: ${{ inputs.dockerfilename }}          
       - name: Execute Terraform Scripts
-        uses: placemyorder/awsterraformdeploy@v1.1.1
+        uses: placemyorder/awsterraformdeploy@v1.2.0
         with:
           backendBucket: ${{ inputs.backendBucket }}
           backendDynamoDB: ${{ inputs.backendDynamoDB }}
