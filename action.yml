@@ -64,11 +64,12 @@ runs:
           terraform_version: ${{ inputs.terraformversion }}
       - name: Setup Aws credentials Self-Hosted
         if: ${{ inputs.isrunningonselfhosted == 'true' }}
-        uses: placemyorder/awscredentialsetup@v1.0.0
+        uses: placemyorder/awscredentialsetup@v2.0.0
         with:
           iscleanup: false
           awsaccesskeyid: ${{ inputs.awsaccesskeyid }}
           awsaccesssecret: ${{ inputs.awsaccesssecret }}
+          profilename: ${{ inputs.profileName }}
       - name: Setup Aws credentials
         if: ${{ inputs.isrunningonselfhosted == 'false' }}
         uses: Fooji/create-aws-profile-action@v1
